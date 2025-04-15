@@ -1,7 +1,7 @@
 services:
   - type: web
     name: medconnect-backend
-    env: java
+    env: docker
     plan: free
     buildCommand: ./mvnw clean install
     startCommand: java -jar target/medconnect-0.0.1-SNAPSHOT.jar
