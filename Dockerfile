@@ -16,7 +16,7 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copy the jar from the build stage
-COPY --from=build /app/target/Medconnect-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/MedConnect-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port (Render uses $PORT env variable)
 EXPOSE 8080
