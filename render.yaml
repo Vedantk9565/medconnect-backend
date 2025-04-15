@@ -5,11 +5,11 @@ services:
     plan: free
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://localhost:3306/medconnect
+        value: jdbc:mysql://sql112.infinityfree.com:3306/if0_38757033_XXX
       - key: SPRING_DATASOURCE_USERNAME
-        value: root
+        value: if0_38757033
       - key: SPRING_DATASOURCE_PASSWORD
-        value: vedant@9565
+        value: your_real_password_here
       - key: TWILIO_ACCOUNT_SID
         value: AC205c5b896a18f289796752ef37a8ad86
       - key: TWILIO_AUTH_TOKEN
