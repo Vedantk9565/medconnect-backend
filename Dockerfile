@@ -1,17 +1,25 @@
-# Use a lightweight OpenJDK image
-FROM eclipse-temurin:17-jdk
+# Use official OpenJDK 21 image
+FROM eclipse-temurin:21-jdk as build
 
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy everything from your project into the container
+# Copy project files
 COPY . .
 
-# Run Maven build to package the app
-RUN ./mvnw clean install
+# Build the project using Maven wrapper
+RUN ./mvnw clean install -DskipTests
 
-# Expose port 8080 (Spring Boot default)
+# Use a smaller image just to run the app
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+# Copy the jar from the build stage
+COPY --from=build /app/target/medconnect-0.0.1-SNAPSHOT.jar app.jar
+
+# Expose port (Render uses $PORT env variable)
 EXPOSE 8080
 
-# Start the app
-CMD ["java", "-jar", "target/medconnect-0.0.1-SNAPSHOT.jar"]
+# Start the application
+CMD ["java", "-jar", "app.jar"]
