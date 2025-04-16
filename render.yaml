@@ -14,8 +14,8 @@
 		        value: ${TWILIO_ACCOUNT_SID}
 		      - key: TWILIO_AUTH_TOKEN
 		        value: ${TWILIO_AUTH_TOKEN}
-		      - key: TWILIO_PHONE_NUMBER
-		        value: ${TWILIO_PHONE_NUMBER}
+		      - key: TWILIO_WHATSAPP_FROM
+		        value: ${TWILIO_WHATSAPP_FROM}
 		      # Add more environment variables as needed (e.g., MySQL credentials, etc.)
 		    plan: free
 		    region: oregon
