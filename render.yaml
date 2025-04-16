@@ -3,13 +3,14 @@ services:
     name: medconnect-backend
     env: docker
     plan: free
+    autoDeploy: true
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://sql112.infinityfree.com:3306/if0_38757033_XXX
+        value: jdbc:mysql://shuttle.proxy.rlwy.net:56319/railway
       - key: SPRING_DATASOURCE_USERNAME
-        value: if0_38757033
+        value: root
       - key: SPRING_DATASOURCE_PASSWORD
-        value: your_real_password_here
+        value: AghfWjvEbVeEueGfDwzZMzvZOzGVpFST
       - key: TWILIO_ACCOUNT_SID
         value: AC205c5b896a18f289796752ef37a8ad86
       - key: TWILIO_AUTH_TOKEN
