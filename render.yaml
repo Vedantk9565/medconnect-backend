@@ -1,19 +1,21 @@
-services:
-  - type: web
-    name: medconnect-backend
-    env: docker
-    plan: free
-    autoDeploy: true
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://shuttle.proxy.rlwy.net:56319/railway
-      - key: SPRING_DATASOURCE_USERNAME
-        value: root
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: AghfWjvEbVeEueGfDwzZMzvZOzGVpFST
-      - key: TWILIO_ACCOUNT_SID
-        value: AC205c5b896a18f289796752ef37a8ad86
-      - key: TWILIO_AUTH_TOKEN
-        value: 06a16dc64fe984e3a9bf57c97d52ce47
-      - key: TWILIO_WHATSAPP_FROM
-        value: whatsapp:+14155238886
+
+		services:
+		  - type: web
+		    name: medconnect-backend
+		    env: java
+		    buildCommand: "./mvnw clean install"  # For Maven projects
+		    startCommand: "java -jar target/medconnect-backend-0.0.1-SNAPSHOT.jar"  # Modify if your JAR file name is different
+		    envVars:
+		      - key: SPRING_PROFILES_ACTIVE
+		        value: prod  # If using profiles to indicate production
+		      - key: DATABASE_URL
+		        value: ${DATABASE_URL} # Railway DB connection URL
+		      - key: TWILIO_ACCOUNT_SID
+		        value: ${TWILIO_ACCOUNT_SID}
+		      - key: TWILIO_AUTH_TOKEN
+		        value: ${TWILIO_AUTH_TOKEN}
+		      - key: TWILIO_PHONE_NUMBER
+		        value: ${TWILIO_PHONE_NUMBER}
+		      # Add more environment variables as needed (e.g., MySQL credentials, etc.)
+		    plan: free
+		    region: oregon
