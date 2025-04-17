@@ -1,6 +1,8 @@
 package com.MedConnect.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,16 +63,21 @@ public class PrescriptionController {
                 return ResponseEntity.badRequest().body("Patient or phone number not found.");
             }
 
-            // Generate PDF
+            // 🔽 Define the external directory where PDF will be stored
+            String basePath = "/tmp/uploads/prescriptions/";  // Use /tmp directory on Render
             String pdfFileName = id + ".pdf";
-            String pdfPath = "src/main/resources/static/prescriptions/" + pdfFileName;
-            createPdfForPatient(patient, pdfPath); // You’ll write this method
+            String pdfPath = basePath + pdfFileName;
 
-            // Publicly accessible URL (must match your deployment)
-            String pdfUrl = "https://yourdomain.com/prescriptions/" + pdfFileName;
+            // 🔽 Generate the PDF and save it
+            createPdfForPatient(patient, pdfPath);
+
+            // 🔽 Public URL pointing to your new custom endpoint
+            String pdfUrl = "https://medconnect-backend-283p.onrender.com/api/v1/prescriptions/files/" + pdfFileName;
+
+            // 🔽 WhatsApp message caption
             String caption = "Hello " + patient.getName() + ", please find your prescription attached.";
 
-            // Send via Twilio
+            // 🔽 Send the PDF via WhatsApp
             twilioService.sendWhatsAppMessageWithMedia(patient.getPhoneNumber(), pdfUrl, caption);
 
             return ResponseEntity.ok("Prescription PDF sent successfully via WhatsApp!");
@@ -79,9 +86,15 @@ public class PrescriptionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending prescription!");
         }
     }
+
     
  // ⬇️ Put the PDF creation method right here
     private void createPdfForPatient(Patient patient, String filePath) throws IOException {
+        File directory = new File(filePath).getParentFile();
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         PdfWriter writer = new PdfWriter(filePath);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
@@ -95,6 +108,29 @@ public class PrescriptionController {
 
         document.close();
     }
+
+    	@GetMapping("/files/{filename:.+}")
+    	public ResponseEntity<?> servePrescriptionPdf(@PathVariable String filename) {
+        try {
+            String filePath =  "/tmp/uploads/prescriptions/" + filename;
+            File file = new File(filePath);
+
+            if (!file.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "inline; filename=\"" + file.getName() + "\"")
+                    .header("Content-Type", "application/pdf")
+                    .body(fileContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading file.");
+        }
+    }
+
 
 
    
