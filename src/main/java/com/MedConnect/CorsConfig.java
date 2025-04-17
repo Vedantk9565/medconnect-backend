@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all paths
-                        .allowedOrigins("http://localhost:4200") // Allow frontend origin
+                        .allowedOrigins("http://localhost:4200", "https://medconnect-frontend-1.onrender.com") // Allow frontend origin and production URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
             }
