@@ -17,20 +17,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.MedConnect.entity.Patient;
+import com.MedConnect.entity.Prescription;
+import com.MedConnect.repository.PrescriptionRepository;
+import com.MedConnect.service.PatientService;
+import com.MedConnect.service.TwilioService;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.MedConnect.entity.Patient;
-import com.MedConnect.entity.Prescription;
-import com.MedConnect.repository.PrescriptionRepository;
-import com.MedConnect.service.PatientService;
-import com.MedConnect.service.TwilioService;
 
 @CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @RestController
@@ -99,7 +102,11 @@ public class PrescriptionController {
         if (!directory.exists()) {
             directory.mkdirs();
         }
+     // For blue color
+        Color BLUE = new DeviceRgb(0, 0, 255);
 
+        // For light gray color
+        Color LIGHT_GRAY = new DeviceRgb(211, 211, 211);
         PdfWriter writer = new PdfWriter(filePath);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
@@ -114,26 +121,26 @@ public class PrescriptionController {
                        .setBold()
                        .setFontSize(18)
                        .setTextAlignment(TextAlignment.CENTER)
-                       .setFontColor(Color.BLUE));
+                       .setFontColor(new DeviceRgb(0, 0, 255)));
 
         // Add patient details in a table with a background color
         float[] columnWidths = {2, 4};
         Table table = new Table(columnWidths);
 
         // Table Header
-        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
         table.addCell(new Cell().add(new Paragraph(patient.getName())));
 
-        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getAge()))));
 
-        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
         table.addCell(new Cell().add(new Paragraph(patient.getBlood())));
 
-        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
         table.addCell(new Cell().add(new Paragraph(patient.getPrescription())));
 
-        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getFees()))));
 
         document.add(table);
