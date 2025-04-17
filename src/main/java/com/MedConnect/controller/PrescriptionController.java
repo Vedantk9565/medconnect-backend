@@ -16,11 +16,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
-
+import com.itextpdf.layout.properties.TextAlignment;
 import com.MedConnect.entity.Patient;
 import com.MedConnect.entity.Prescription;
 import com.MedConnect.repository.PrescriptionRepository;
@@ -99,15 +104,47 @@ public class PrescriptionController {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        document.add(new Paragraph("Prescription"));
-        document.add(new Paragraph("Name: " + patient.getName()));
-        document.add(new Paragraph("Age: " + patient.getAge()));
-        document.add(new Paragraph("Blood Group: " + patient.getBlood()));
-        document.add(new Paragraph("Prescription: " + patient.getPrescription()));
-        document.add(new Paragraph("Fees: " + patient.getFees()));
+        // Add logo (optional)
+        Image logo = new Image(ImageDataFactory.create("https://medconnect-backend-283p.onrender.com/assets/medconnect2-logo.png"));
+        logo.setWidth(100).setHeight(100).setFixedPosition(500, 750);
+        document.add(logo);
 
+        // Add title
+        document.add(new Paragraph("Prescription")
+                       .setBold()
+                       .setFontSize(18)
+                       .setTextAlignment(TextAlignment.CENTER)
+                       .setFontColor(Color.BLUE));
+
+        // Add patient details in a table with a background color
+        float[] columnWidths = {2, 4};
+        Table table = new Table(columnWidths);
+
+        // Table Header
+        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph(patient.getName())));
+
+        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getAge()))));
+
+        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph(patient.getBlood())));
+
+        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph(patient.getPrescription())));
+
+        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(Color.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getFees()))));
+
+        document.add(table);
+
+        // Footer message
+        document.add(new Paragraph("Thank you for using MedConnect!").setTextAlignment(TextAlignment.CENTER));
+
+        // Close the document
         document.close();
     }
+
 
     	@GetMapping("/files/{filename:.+}")
     	public ResponseEntity<?> servePrescriptionPdf(@PathVariable String filename) {

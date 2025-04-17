@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/patients")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 public class PatientController {
 
     private final PatientRepository patientRepository;
