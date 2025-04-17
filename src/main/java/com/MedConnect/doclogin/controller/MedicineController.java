@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.MedConnect.doclogin.entity.Medicine;
 import com.MedConnect.doclogin.repository.MedicineRepository;
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @RestController
 @RequestMapping("/api/v3")
 public class MedicineController {

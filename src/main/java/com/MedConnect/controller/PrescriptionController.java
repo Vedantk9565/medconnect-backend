@@ -25,7 +25,7 @@ import com.MedConnect.repository.PrescriptionRepository;
 import com.MedConnect.service.PatientService;
 import com.MedConnect.service.TwilioService;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @RestController
 @RequestMapping("/api/v1/prescriptions")
 public class PrescriptionController {

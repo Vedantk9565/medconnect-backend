@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @Entity
 @Table(name ="medicines")
 public class Medicine {

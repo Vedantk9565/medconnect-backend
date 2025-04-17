@@ -1,7 +1,9 @@
 package com.MedConnect.entity;
 
-import jakarta.persistence.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+import jakarta.persistence.*;
+@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @Entity
 public class Prescription {
     @Id
