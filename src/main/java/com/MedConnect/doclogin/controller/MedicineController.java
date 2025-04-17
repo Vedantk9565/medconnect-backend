@@ -34,7 +34,7 @@ public class MedicineController {
 	public Medicine createMedicine(@RequestBody Medicine medicine) {
 	return medicineRepository.save(medicine);
 	}
-	@GetMapping("/medicines")
+	@GetMapping(value= "/medicines",produces = "application/json")
 	public List<Medicine>getAllMedicine(){
 		return medicineRepository.findAll();
 	}
