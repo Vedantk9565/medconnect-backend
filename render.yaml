@@ -4,18 +4,12 @@
 		    name: medconnect-backend
 		    env: java
 		    buildCommand: "./mvnw clean install"  # For Maven projects
-		    startCommand: "java -jar target/medconnect-backend-0.0.1-SNAPSHOT.jar"  # Modify if your JAR file name is different
+		    startCommand: "java -jar target/MedConnect-0.0.1-SNAPSHOT.jar"  # Modify if your JAR file name is different
 		    envVars:
 		      - key: SPRING_PROFILES_ACTIVE
 		        value: prod  # If using profiles to indicate production
-		      - key: DATABASE_URL
-		        value: ${DATABASE_URL} # Railway DB connection URL
-		      - key: TWILIO_ACCOUNT_SID
-		        value: ${TWILIO_ACCOUNT_SID}
-		      - key: TWILIO_AUTH_TOKEN
-		        value: ${TWILIO_AUTH_TOKEN}
-		      - key: TWILIO_WHATSAPP_FROM
-		        value: ${TWILIO_WHATSAPP_FROM}
+		     
 		      # Add more environment variables as needed (e.g., MySQL credentials, etc.)
 		    plan: free
 		    region: oregon
+			

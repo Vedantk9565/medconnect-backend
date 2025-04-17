@@ -31,8 +31,9 @@ public class TwilioService {
 
     @PostConstruct
     public void init() {
-        Twilio.init(accountSid, authToken);
         logger.info("✅ Twilio initialized with SID: {}", accountSid);
+        logger.info("📲 Twilio From: {}", whatsappFrom);
+        Twilio.init(accountSid, authToken);
     }
 
     public void sendWhatsAppMessageWithMedia(String toPhoneNumber, String mediaUrl, String caption) {
