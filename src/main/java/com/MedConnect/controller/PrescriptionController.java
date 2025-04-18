@@ -173,9 +173,11 @@ public class PrescriptionController {
             medTable.addCell(new Cell().add(new Paragraph("Time To Take").setBold()));
 
             for (Prescription p : prescriptions) {
-                medTable.addCell(String.valueOf(p.getMedicineId()));
+                medTable.addCell(String.valueOf(p.getMedicine()));
                 medTable.addCell(p.getDosage());
                 medTable.addCell(p.getTimeToTake());
+                medTable.addCell(p.getMedicine().getDrugName()); // Displaying the name of the medicine
+
             }
 
             document.add(medTable);
