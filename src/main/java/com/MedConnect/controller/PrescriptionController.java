@@ -166,14 +166,15 @@ public class PrescriptionController {
         if (!prescriptions.isEmpty()) {
             document.add(new Paragraph("Detailed Medicines").setBold().setFontSize(12).setMarginTop(10));
 
-            Table medTable = new Table(new float[]{4, 2, 2});
+            Table medTable = new Table(new float[]{3, 3, 3, 4});
             medTable.setWidth(UnitValue.createPercentValue(100));
             medTable.addCell(new Cell().add(new Paragraph("Medicine ID").setBold()));
             medTable.addCell(new Cell().add(new Paragraph("Dosage").setBold()));
             medTable.addCell(new Cell().add(new Paragraph("Time To Take").setBold()));
-
+            medTable.addCell(new Cell().add(new Paragraph("Drug Name").setBold())); // new column header
+            
             for (Prescription p : prescriptions) {
-                medTable.addCell(String.valueOf(p.getMedicine()));
+                medTable.addCell(String.valueOf(p.getMedicine().getId()));
                 medTable.addCell(p.getDosage());
                 medTable.addCell(p.getTimeToTake());
                 medTable.addCell(p.getMedicine().getDrugName()); // Displaying the name of the medicine
