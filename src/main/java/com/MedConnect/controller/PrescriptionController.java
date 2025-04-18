@@ -112,7 +112,7 @@ public class PrescriptionController {
 
         // Logo
         Image logo = new Image(ImageDataFactory.create("https://medconnect-frontend-1.onrender.com/assets/medconnect2-logo.png"));
-        logo.setWidth(80).setHeight(80);
+        logo.setWidth(90).setHeight(90);
         logo.setHorizontalAlignment(HorizontalAlignment.CENTER); // Center align the logo
         document.add(logo);
 
