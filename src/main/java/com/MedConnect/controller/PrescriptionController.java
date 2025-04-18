@@ -109,7 +109,7 @@ public class PrescriptionController {
         Document document = new Document(pdf);
 
         // Add logo (optional)
-        Image logo = new Image(ImageDataFactory.create("https://medconnect-backend-283p.onrender.com/assets/medconnect2-logo.png"));
+        Image logo = new Image(ImageDataFactory.create("https://medconnect-frontend-1.onrender.com/assets/medconnect2-logo.png"));
         logo.setWidth(100).setHeight(100).setFixedPosition(500, 750);
         document.add(logo);
 
