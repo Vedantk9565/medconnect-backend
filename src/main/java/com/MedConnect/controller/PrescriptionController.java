@@ -157,7 +157,31 @@ public class PrescriptionController {
         document.add(new Paragraph("(BHMS) Bachelor of Homeopathic Medicine and Surgery"));
         document.add(new Paragraph("Phone: +91 9699-590-048"));
 
+        
+        
+        
+        
+        List<Prescription> prescriptions = prescriptionRepository.findByPatientId(patient.getId());
+
+        if (!prescriptions.isEmpty()) {
+            document.add(new Paragraph("Detailed Medicines").setBold().setFontSize(12).setMarginTop(10));
+
+            Table medTable = new Table(new float[]{4, 2, 2});
+            medTable.setWidth(UnitValue.createPercentValue(100));
+            medTable.addCell(new Cell().add(new Paragraph("Medicine ID").setBold()));
+            medTable.addCell(new Cell().add(new Paragraph("Dosage").setBold()));
+            medTable.addCell(new Cell().add(new Paragraph("Time To Take").setBold()));
+
+            for (Prescription p : prescriptions) {
+                medTable.addCell(String.valueOf(p.getMedicineId()));
+                medTable.addCell(p.getDosage());
+                medTable.addCell(p.getTimeToTake());
+            }
+
+            document.add(medTable);
+        }
         document.close();
+
     }
 
 
