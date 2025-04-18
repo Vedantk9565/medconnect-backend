@@ -174,7 +174,8 @@ public class PrescriptionController {
             medTable.addCell(new Cell().add(new Paragraph("Drug Name").setBold())); // new column header
             
             for (Prescription p : prescriptions) {
-                medTable.addCell(String.valueOf(p.getMedicine().getId()));
+              
+            	medTable.addCell(String.valueOf(p.getMedicine().getId()));
                 medTable.addCell(p.getDosage());
                 medTable.addCell(p.getTimeToTake());
                 medTable.addCell(p.getMedicine().getDrugName()); // Displaying the name of the medicine
@@ -184,6 +185,7 @@ public class PrescriptionController {
             document.add(medTable);
         }
         document.close();
+        System.out.println("PDF created at: " + filePath);
 
     }
 
@@ -194,6 +196,7 @@ public class PrescriptionController {
         try {
             String filePath =  "/tmp/uploads/prescriptions/" + filename;
             File file = new File(filePath);
+            System.out.println("Trying to serve file from: " + filePath);
 
             if (!file.exists()) {
                 return ResponseEntity.notFound().build();
@@ -209,6 +212,7 @@ public class PrescriptionController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading file.");
         }
+        
     }
 
 
