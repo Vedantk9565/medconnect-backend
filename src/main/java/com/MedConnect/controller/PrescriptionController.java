@@ -108,50 +108,51 @@ public class PrescriptionController {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        // Add logo (optional)
+        // Logo
         Image logo = new Image(ImageDataFactory.create("https://medconnect-frontend-1.onrender.com/assets/medconnect2-logo.png"));
-        logo.setWidth(100).setHeight(100).setFixedPosition(500, 750);
+        logo.setWidth(80).setHeight(80);
         document.add(logo);
 
-        // Add title
-        document.add(new Paragraph("Prescription")
-                       .setBold()
-                       .setFontSize(18)
-                       .setTextAlignment(TextAlignment.CENTER)
-                       .setFontColor(ColorConstants.BLUE));
+        // Date & Time
+        String dateTime = java.time.LocalDateTime.now().toString().replace("T", ", ");
+        document.add(new Paragraph("Date & Time: " + dateTime).setBold());
 
+        // Title
+        document.add(new Paragraph("Patient Prescription Details").setBold().setFontSize(14).setMarginTop(10));
 
-        // Add patient details in a table with a background color
-        float[] columnWidths = {2, 4};
+        // Table for patient data
+        float[] columnWidths = {4, 8};
         Table table = new Table(columnWidths);
 
-        // Table Header
-        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+        // Helper method to add rows
+        table.addCell(new Cell().add(new Paragraph("ID").setBold()));
+        table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getId()))));
 
+        table.addCell(new Cell().add(new Paragraph("Name").setBold()));
         table.addCell(new Cell().add(new Paragraph(patient.getName())));
 
-        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-
+        table.addCell(new Cell().add(new Paragraph("Age").setBold()));
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getAge()))));
 
-        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-
+        table.addCell(new Cell().add(new Paragraph("Blood Group").setBold()));
         table.addCell(new Cell().add(new Paragraph(patient.getBlood())));
 
-        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+        table.addCell(new Cell().add(new Paragraph("Dose").setBold()));
+        table.addCell(new Cell().add(new Paragraph(patient.getDose()))); // Make sure 'dose' is in Patient entity
 
+        table.addCell(new Cell().add(new Paragraph("Prescription").setBold()));
         table.addCell(new Cell().add(new Paragraph(patient.getPrescription())));
 
-        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-
+        table.addCell(new Cell().add(new Paragraph("Fees").setBold()));
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getFees()))));
 
-        document.add(table);
+        document.add(table.setMarginTop(10).setMarginBottom(20));
 
-        // Footer message
-        document.add(new Paragraph("Thank you for using MedConnect!").setTextAlignment(TextAlignment.CENTER));
+        // Doctor details
+        document.add(new Paragraph("Dr. Kadam").setBold().setMarginTop(20));
+        document.add(new Paragraph("(BHMS) Bachelor of Homeopathic Medicine and Surgery"));
+        document.add(new Paragraph("Phone: +91 9699-590-048"));
 
-        // Close the document
         document.close();
     }
 
