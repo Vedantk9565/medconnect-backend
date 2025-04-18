@@ -35,6 +35,7 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
 @CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @RestController
@@ -121,8 +122,9 @@ public class PrescriptionController {
         document.add(new Paragraph("Patient Prescription Details").setBold().setFontSize(14).setMarginTop(10));
 
         // Table for patient data
-        float[] columnWidths = {20,20};
+        float[] columnWidths = {1, 2}; // ID & Data column; feel free to adjust ratio
         Table table = new Table(columnWidths);
+        table.setWidth(UnitValue.createPercentValue(100)); // Full page width
 
         // Helper method to add rows
         table.addCell(new Cell().add(new Paragraph("ID").setBold()));
