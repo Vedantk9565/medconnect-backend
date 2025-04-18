@@ -4,6 +4,7 @@ import com.MedConnect.service.TwilioService;
 import com.MedConnect.entity.Patient;
 import com.MedConnect.repository.PatientRepository;
 import com.MedConnect.dto.PrescriptionRequest;
+import model.MedicineWithTime;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/v1/patients")
@@ -74,7 +76,7 @@ public class PatientController {
     @PutMapping("/{id}/add-medicine")
     public ResponseEntity<?> assignMedicineToPatient(
             @PathVariable Long id,
-            @RequestBody List<String> medicines) {
+            @RequestBody List<MedicineWithTime> medicinesWithTime) {
 
         Optional<Patient> patientOpt = patientRepository.findById(id);
         if (patientOpt.isEmpty()) {
@@ -83,13 +85,24 @@ public class PatientController {
 
         Patient patient = patientOpt.get();
         String existingPrescription = patient.getPrescription() != null ? patient.getPrescription() : "";
-        String updatedPrescription = existingPrescription + "\n" + String.join(", ", medicines);
+        
+        // Build the updated prescription with medicine name and time
+        StringBuilder updatedPrescription = new StringBuilder(existingPrescription);
 
-        patient.setPrescription(updatedPrescription.trim());
+        // Loop through medicinesWithTime and append each medicine with its time
+        for (MedicineWithTime medicineWithTime : medicinesWithTime) {
+            updatedPrescription.append("\n")
+                .append(medicineWithTime.getMedicineName()) // Add medicine name
+                .append(" - ")
+                .append(medicineWithTime.getTimeToTake()); // Add time to take
+        }
+
+        patient.setPrescription(updatedPrescription.toString().trim());
         patientRepository.save(patient);
 
         return ResponseEntity.ok("Medicines assigned successfully");
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePatient(@PathVariable Long id) {
         try {
