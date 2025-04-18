@@ -121,7 +121,7 @@ public class PrescriptionController {
         document.add(new Paragraph("Patient Prescription Details").setBold().setFontSize(14).setMarginTop(10));
 
         // Table for patient data
-        float[] columnWidths = {10, 8};
+        float[] columnWidths = {20,20};
         Table table = new Table(columnWidths);
 
         // Helper method to add rows
