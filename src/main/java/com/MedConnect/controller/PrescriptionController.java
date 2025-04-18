@@ -34,6 +34,7 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
@@ -112,6 +113,7 @@ public class PrescriptionController {
         // Logo
         Image logo = new Image(ImageDataFactory.create("https://medconnect-frontend-1.onrender.com/assets/medconnect2-logo.png"));
         logo.setWidth(80).setHeight(80);
+        logo.setHorizontalAlignment(HorizontalAlignment.CENTER); // Center align the logo
         document.add(logo);
 
         // Date & Time
