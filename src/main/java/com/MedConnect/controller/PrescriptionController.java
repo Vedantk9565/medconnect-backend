@@ -25,6 +25,7 @@ import com.MedConnect.service.PatientService;
 import com.MedConnect.service.TwilioService;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -102,18 +103,13 @@ public class PrescriptionController {
         if (!directory.exists()) {
             directory.mkdirs();
         }
-     // For blue color
-        Color BLUE = new DeviceRgb(0, 0, 255);
 
-        // For light gray color
-        Color LIGHT_GRAY = new DeviceRgb(211, 211, 211);
         PdfWriter writer = new PdfWriter(filePath);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
         // Add logo (optional)
-        Image logo = new Image(ImageDataFactory.create("https://medconnect-frontend-1.onrender.com/assets/medconnect2-logo.png"));
-
+        Image logo = new Image(ImageDataFactory.create("https://medconnect-backend-283p.onrender.com/assets/medconnect2-logo.png"));
         logo.setWidth(100).setHeight(100).setFixedPosition(500, 750);
         document.add(logo);
 
@@ -122,26 +118,32 @@ public class PrescriptionController {
                        .setBold()
                        .setFontSize(18)
                        .setTextAlignment(TextAlignment.CENTER)
-                       .setFontColor(new DeviceRgb(0, 0, 255)));
+                       .setFontColor(ColorConstants.BLUE));
+
 
         // Add patient details in a table with a background color
         float[] columnWidths = {2, 4};
         Table table = new Table(columnWidths);
 
         // Table Header
-        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
+        table.addCell(new Cell().add(new Paragraph("Patient Name:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
         table.addCell(new Cell().add(new Paragraph(patient.getName())));
 
-        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
+        table.addCell(new Cell().add(new Paragraph("Age:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getAge()))));
 
-        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
+        table.addCell(new Cell().add(new Paragraph("Blood Group:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
         table.addCell(new Cell().add(new Paragraph(patient.getBlood())));
 
-        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
+        table.addCell(new Cell().add(new Paragraph("Prescription:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
         table.addCell(new Cell().add(new Paragraph(patient.getPrescription())));
 
-        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(new DeviceRgb(211, 211, 211)));
+        table.addCell(new Cell().add(new Paragraph("Fees:")).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getFees()))));
 
         document.add(table);
@@ -152,6 +154,7 @@ public class PrescriptionController {
         // Close the document
         document.close();
     }
+
 
 
     	@GetMapping("/files/{filename:.+}")
