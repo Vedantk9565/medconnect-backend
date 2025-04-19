@@ -66,6 +66,27 @@ public class PatientController {
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient updatedPatient) {
+        Optional<Patient> existingPatientOpt = patientRepository.findById(id);
+        if (existingPatientOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Patient existingPatient = existingPatientOpt.get();
+
+        // Update fields manually, or use a mapper
+        existingPatient.setName(updatedPatient.getName());
+        existingPatient.setAge(updatedPatient.getAge());
+        existingPatient.setBlood(updatedPatient.getBlood());
+        existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+        existingPatient.setPrescription(updatedPatient.getPrescription());
+        existingPatient.setFees(updatedPatient.getFees());
+
+        Patient saved = patientRepository.save(existingPatient);
+        return ResponseEntity.ok(saved);
+    }
+
 
     @PostMapping
     public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
