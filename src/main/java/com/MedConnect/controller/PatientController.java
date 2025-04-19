@@ -7,11 +7,15 @@ import com.MedConnect.repository.PatientRepository;
 import com.MedConnect.doclogin.entity.Medicine;
 import com.MedConnect.dto.PrescriptionRequest;
 import com.MedConnect.model.*;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.MedConnect.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,21 +132,27 @@ public class PatientController {
 
                 newPrescription.setMedicine(medicine);
                 newPrescription.setDosage("1 tablet");
-                newPrescription.setTimeToTake(time);
 
-                newPrescription.setTimeToTake(String.join(",", medicineWithTime.getTimeToTake())); // Comma separated
+                // Serialize the List<String> to a JSON string
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String timeToTakeJson = objectMapper.writeValueAsString(medicineWithTime.getTimeToTake());
+                    newPrescription.setTimeToTake(timeToTakeJson);  // Set JSON formatted time slots
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error serializing timeToTake");
+                }
 
-                
                 existingPrescriptions.add(newPrescription);
             }
         }
-
 
         patient.setPrescription(existingPrescriptions); // Update patient's prescription list
         patientRepository.save(patient); // Save the updated patient entity
 
         return ResponseEntity.ok("Medicines assigned successfully");
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePatient(@PathVariable Long id) {

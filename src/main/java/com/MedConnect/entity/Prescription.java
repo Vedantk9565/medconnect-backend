@@ -23,8 +23,8 @@ public class Prescription {
 
     private String dosage;
 
-    @Column(name = "time_to_take")
-    private String timeToTake; // e.g., "Morning", "Afternoon", "Night"
+    @Column(name = "time_to_take", columnDefinition = "JSON")
+    private String timeToTake;
 
     // Constructors
     public Prescription() {}
