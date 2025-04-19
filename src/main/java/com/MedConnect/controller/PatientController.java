@@ -94,7 +94,7 @@ public class PatientController {
         return new ResponseEntity<>(savedPatient, HttpStatus.CREATED);
     }
 
-    @PutMapping("/patients/{id}/add-medicine")
+    @PutMapping("/{id}/add-medicine")
     public ResponseEntity<?> assignMedicineToPatient(
             @PathVariable Long id,
             @RequestBody List<MedicineWithTime> medicinesWithTime) {

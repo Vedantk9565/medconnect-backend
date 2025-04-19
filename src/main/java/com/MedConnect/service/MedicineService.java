@@ -21,8 +21,8 @@ public class MedicineService {
 
     // Fetch medicine by its name (or any other identifier you prefer)
     public Medicine getMedicineByName(String name) {
-        return medicineRepository.findByDrugName(name).orElse(null);
-    
+    	return medicineRepository.findByDrugNameIgnoreCase(name).orElse(null);
+
     
     
     }
