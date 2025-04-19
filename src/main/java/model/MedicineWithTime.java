@@ -1,19 +1,21 @@
 package model;
 
-import java.util.List;  // Use Java's List class
+import java.util.List;
 
 public class MedicineWithTime {
     private String medicineName;
-    private List<String> timeToTake; 
-    
+    private List<String> timeToTake;
 
-    // Constructor
+    // ✅ No-args constructor (required for Jackson)
+    public MedicineWithTime() {
+    }
+
+    // All-args constructor
     public MedicineWithTime(String medicineName, List<String> timeToTake) {
         this.medicineName = medicineName;
         this.timeToTake = timeToTake;
     }
 
-    // Getters and Setters
     public String getMedicineName() {
         return medicineName;
     }

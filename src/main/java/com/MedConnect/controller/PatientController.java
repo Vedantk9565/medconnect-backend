@@ -110,6 +110,8 @@ public class PatientController {
         if (existingPrescriptions == null) {
             existingPrescriptions = new java.util.ArrayList<>();
         }
+        System.out.println("Available medicines:");
+        medicineService.getAllMedicines().forEach(m -> System.out.println(m.getDrugName()));
 
         for (MedicineWithTime medicineWithTime : medicinesWithTime) {
             System.out.println("Received medicine: " + medicineWithTime.getMedicineName());
