@@ -61,7 +61,7 @@ public class PrescriptionController {
     // Get prescriptions for a specific patient
     @GetMapping("/{patientId}")
     public List<Prescription> getPrescriptionsForPatient(@PathVariable Long patientId) {
-        return prescriptionRepository.findByPatientId(patientId);
+    	return prescriptionRepository.findByPatientId(patientId);
     }
 
     // Send prescription to a patient's WhatsApp
