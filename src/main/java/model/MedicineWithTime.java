@@ -1,11 +1,13 @@
 package model;
 
+import java.util.List;  // Use Java's List class
+
 public class MedicineWithTime {
     private String medicineName;
-    private String timeToTake;
+    private List<String> timeToTake;  // Corrected to use java.util.List
 
     // Constructor
-    public MedicineWithTime(String medicineName, String timeToTake) {
+    public MedicineWithTime(String medicineName, List<String> timeToTake) {
         this.medicineName = medicineName;
         this.timeToTake = timeToTake;
     }
@@ -19,11 +21,11 @@ public class MedicineWithTime {
         this.medicineName = medicineName;
     }
 
-    public String getTimeToTake() {
+    public List<String> getTimeToTake() {
         return timeToTake;
     }
 
-    public void setTimeToTake(String timeToTake) {
+    public void setTimeToTake(List<String> timeToTake) {
         this.timeToTake = timeToTake;
     }
 }
