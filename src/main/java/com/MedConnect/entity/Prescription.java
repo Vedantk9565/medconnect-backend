@@ -3,6 +3,7 @@ package com.MedConnect.entity;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import com.MedConnect.doclogin.entity.Medicine;
+import com.MedConnect.entity.Patient;  
 
 @CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @Entity
@@ -12,11 +13,13 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long patientId;
+    @ManyToOne
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    private Patient patient;  // Establishes relationship with Patient entity
 
     @ManyToOne
-    @JoinColumn(name = "medicine_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Medicine medicine;  // Optional: if you want a reference to the Medicine entity
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+    private Medicine medicine;  // Reference to the Medicine entity
 
     private String dosage;
 
@@ -26,9 +29,8 @@ public class Prescription {
     // Constructors
     public Prescription() {}
 
-    // Constructor updated to use the Medicine entity
-    public Prescription(Long patientId, Medicine medicine, String dosage, String timeToTake) {
-        this.patientId = patientId;
+    public Prescription(Patient patient, Medicine medicine, String dosage, String timeToTake) {
+        this.patient = patient;  // Directly using Patient entity
         this.medicine = medicine;  // Directly using Medicine entity
         this.dosage = dosage;
         this.timeToTake = timeToTake;
@@ -39,12 +41,12 @@ public class Prescription {
         return id;
     }
 
-    public Long getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public Medicine getMedicine() {
