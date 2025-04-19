@@ -130,6 +130,9 @@ public class PatientController {
                 newPrescription.setDosage("1 tablet");
                 newPrescription.setTimeToTake(time);
 
+                newPrescription.setTimeToTake(String.join(",", medicineWithTime.getTimeToTake())); // Comma separated
+
+                
                 existingPrescriptions.add(newPrescription);
             }
         }
