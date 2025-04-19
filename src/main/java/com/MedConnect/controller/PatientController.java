@@ -94,7 +94,7 @@ public class PatientController {
         return new ResponseEntity<>(savedPatient, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/add-medicine")
+    @PutMapping("/patients/{id}/add-medicine")
     public ResponseEntity<?> assignMedicineToPatient(
             @PathVariable Long id,
             @RequestBody List<MedicineWithTime> medicinesWithTime) {
@@ -151,4 +151,9 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting patient.");
         }
     }
+    @GetMapping("/medicines")
+    public List<Medicine> getAllMedicines() {
+        return medicineService.getAllMedicines();
+    }
+
 }
