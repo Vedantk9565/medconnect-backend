@@ -112,25 +112,26 @@ public class PatientController {
         }
 
         for (MedicineWithTime medicineWithTime : medicinesWithTime) {
+            System.out.println("Received medicine: " + medicineWithTime.getMedicineName());
             for (String time : medicineWithTime.getTimeToTake()) {
                 Prescription newPrescription = new Prescription();
 
-                // Set the actual Patient entity instead of just patientId
                 newPrescription.setPatient(patient); 
 
-                // Fetch the actual Medicine from the database or service
                 Medicine medicine = medicineService.getMedicineByName(medicineWithTime.getMedicineName());
                 if (medicine == null) {
+                    System.out.println("Medicine not found: " + medicineWithTime.getMedicineName());
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine not found: " + medicineWithTime.getMedicineName());
                 }
 
                 newPrescription.setMedicine(medicine);
-                newPrescription.setDosage("1 tablet"); // or customize based on the request
+                newPrescription.setDosage("1 tablet");
                 newPrescription.setTimeToTake(time);
 
                 existingPrescriptions.add(newPrescription);
             }
         }
+
 
         patient.setPrescription(existingPrescriptions); // Update patient's prescription list
         patientRepository.save(patient); // Save the updated patient entity

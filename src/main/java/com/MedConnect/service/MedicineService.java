@@ -2,6 +2,9 @@ package com.MedConnect.service;
 
 import com.MedConnect.doclogin.entity.Medicine;
 import com.MedConnect.doclogin.repository.MedicineRepository;
+import java.util.List;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,13 @@ public class MedicineService {
     // Fetch medicine by its name (or any other identifier you prefer)
     public Medicine getMedicineByName(String name) {
         return medicineRepository.findByDrugName(name).orElse(null);
+    
+    
+    
     }
 
+    public List<Medicine> getAllMedicines() {
+        return medicineRepository.findAll();
+    }
 
 }
