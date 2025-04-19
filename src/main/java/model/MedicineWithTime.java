@@ -4,7 +4,8 @@ import java.util.List;  // Use Java's List class
 
 public class MedicineWithTime {
     private String medicineName;
-    private List<String> timeToTake;  // Corrected to use java.util.List
+    private List<String> timeToTake; 
+    private String dosage;// Corrected to use java.util.List
 
     // Constructor
     public MedicineWithTime(String medicineName, List<String> timeToTake) {

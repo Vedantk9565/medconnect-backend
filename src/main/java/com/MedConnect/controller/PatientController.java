@@ -2,7 +2,9 @@ package com.MedConnect.controller;
 
 import com.MedConnect.service.TwilioService;
 import com.MedConnect.entity.Patient;
+import com.MedConnect.entity.Prescription;
 import com.MedConnect.repository.PatientRepository;
+import com.MedConnect.doclogin.entity.Medicine;
 import com.MedConnect.dto.PrescriptionRequest;
 import model.MedicineWithTime;
 
@@ -84,24 +86,37 @@ public class PatientController {
         }
 
         Patient patient = patientOpt.get();
-        String existingPrescription = patient.getPrescription() != null ? patient.getPrescription() : "";
-        
-        // Build the updated prescription with medicine name and time
-        StringBuilder updatedPrescription = new StringBuilder(existingPrescription);
+        List<Prescription> existingPrescriptions = patient.getPrescription();
 
-        // Loop through medicinesWithTime and append each medicine with its time
-        for (MedicineWithTime medicineWithTime : medicinesWithTime) {
-            updatedPrescription.append("\n")
-                .append(medicineWithTime.getMedicineName()) // Add medicine name
-                .append(" - ")
-                .append(medicineWithTime.getTimeToTake()); // Add time to take
+        if (existingPrescriptions == null) {
+            existingPrescriptions = new java.util.ArrayList<>();
         }
 
-        patient.setPrescription(updatedPrescription.toString().trim());
+        for (MedicineWithTime medicineWithTime : medicinesWithTime) {
+            for (String time : medicineWithTime.getTimeToTake()) {
+                Prescription newPrescription = new Prescription();
+                newPrescription.setPatientId(patient.getId());
+
+                // Dummy medicine for now
+                Medicine medicine = new Medicine();
+                medicine.setDrugName(medicineWithTime.getMedicineName());
+
+                newPrescription.setMedicine(medicine);
+
+                newPrescription.setDosage("1 tablet"); // or customize
+                newPrescription.setTimeToTake(time);
+
+                existingPrescriptions.add(newPrescription);
+            }
+        }
+
+        patient.setPrescription(existingPrescriptions); // ✅ No more string!
         patientRepository.save(patient);
 
         return ResponseEntity.ok("Medicines assigned successfully");
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePatient(@PathVariable Long id) {

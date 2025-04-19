@@ -145,7 +145,16 @@ public class PrescriptionController {
         table.addCell(new Cell().add(new Paragraph(patient.getDose()))); // Make sure 'dose' is in Patient entity
 
         table.addCell(new Cell().add(new Paragraph("Prescription").setBold()));
-        table.addCell(new Cell().add(new Paragraph(patient.getPrescription())));
+        StringBuilder prescriptionDetails = new StringBuilder();
+        for (Prescription prescription : patient.getPrescription()) {
+            prescriptionDetails.append("Medicine: ").append(prescription.getMedicine().getDrugName())
+                    .append(", Dosage: ").append(prescription.getDosage())
+                    .append(", Time to Take: ").append(prescription.getTimeToTake())
+                    .append("\n");
+        }
+
+        table.addCell(new Cell().add(new Paragraph(prescriptionDetails.toString())));
+
 
         table.addCell(new Cell().add(new Paragraph("Fees").setBold()));
         table.addCell(new Cell().add(new Paragraph(String.valueOf(patient.getFees()))));
@@ -157,37 +166,45 @@ public class PrescriptionController {
         document.add(new Paragraph("(BHMS) Bachelor of Homeopathic Medicine and Surgery"));
         document.add(new Paragraph("Phone: +91 9699-590-048"));
 
-        
-        
-        
-        
+        // Retrieve the prescriptions for the patient
         List<Prescription> prescriptions = prescriptionRepository.findByPatientId(patient.getId());
 
         if (!prescriptions.isEmpty()) {
             document.add(new Paragraph("Detailed Medicines").setBold().setFontSize(12).setMarginTop(10));
 
-            Table medTable = new Table(new float[]{3, 3, 3, 4});
+            // Create a Table with columns for prescription details
+            Table medTable = new Table(new float[]{3, 3, 3, 4});  // Adjust column widths if needed
             medTable.setWidth(UnitValue.createPercentValue(100));
+
+            // Add table headers for the columns
             medTable.addCell(new Cell().add(new Paragraph("Medicine ID").setBold()));
             medTable.addCell(new Cell().add(new Paragraph("Dosage").setBold()));
             medTable.addCell(new Cell().add(new Paragraph("Time To Take").setBold()));
-            medTable.addCell(new Cell().add(new Paragraph("Drug Name").setBold())); // new column header
-            
-            for (Prescription p : prescriptions) {
-              
-            	medTable.addCell(String.valueOf(p.getMedicine().getId()));
-                medTable.addCell(p.getDosage());
-                medTable.addCell(p.getTimeToTake());
-                medTable.addCell(p.getMedicine().getDrugName()); // Displaying the name of the medicine
+            medTable.addCell(new Cell().add(new Paragraph("Drug Name").setBold()));
 
+            // Loop through each prescription and add the details to the table
+            for (Prescription p : prescriptions) {
+                // Add a cell for the Medicine ID (assumed to be an integer or similar)
+                medTable.addCell(new Cell().add(new Paragraph(String.valueOf(p.getMedicine().getId()))));
+
+                // Add a cell for Dosage
+                medTable.addCell(new Cell().add(new Paragraph(p.getDosage())));
+
+                // Add a cell for Time To Take
+                medTable.addCell(new Cell().add(new Paragraph(p.getTimeToTake())));
+
+                // Add a cell for the Drug Name (assuming `getMedicine()` returns a `Medicine` object)
+                medTable.addCell(new Cell().add(new Paragraph(p.getMedicine().getDrugName())));
             }
 
+            // Add the table to the document
             document.add(medTable);
         }
+
         document.close();
         System.out.println("PDF created at: " + filePath);
-
     }
+
 
 
 

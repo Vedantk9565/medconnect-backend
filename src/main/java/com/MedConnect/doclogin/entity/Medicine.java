@@ -45,8 +45,8 @@ public class Medicine {
 		return drugName;
 	}
 
-	public void setDrugName(String drugName) {
-		this.drugName = drugName;
+	public void setDrugName(String name) {
+		this.drugName = name;
 	}
 
 	public String getStock() {
@@ -57,5 +57,7 @@ public class Medicine {
 		this.stock = stock;
 	}
 	
+	
+
 	
 }
