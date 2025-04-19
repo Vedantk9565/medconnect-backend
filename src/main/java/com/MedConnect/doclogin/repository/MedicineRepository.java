@@ -1,15 +1,11 @@
 package com.MedConnect.doclogin.repository;
 
-import com.MedConnect.doclogin.entity.Medicine;
-
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.MedConnect.doclogin.entity.Medicine;
+import java.util.List;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
-    // Custom query to find medicine by its drug name
-	Optional<Medicine> findByDrugNameIgnoreCase(String drugName);
-
-
+    // Add this method to support case-insensitive search
+    List<Medicine> findByDrugNameIgnoreCase(String drugName);
 }
