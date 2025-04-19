@@ -6,7 +6,7 @@ import com.MedConnect.entity.Prescription;
 import com.MedConnect.repository.PatientRepository;
 import com.MedConnect.doclogin.entity.Medicine;
 import com.MedConnect.dto.PrescriptionRequest;
-import model.MedicineWithTime;
+import com.MedConnect.model.*;
 import com.MedConnect.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;

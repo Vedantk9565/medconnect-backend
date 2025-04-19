@@ -1,4 +1,4 @@
-package model;
+package com.MedConnect.model;
 
 import java.util.List;
 
@@ -6,9 +6,7 @@ public class MedicineWithTime {
     private String medicineName;
     private List<String> timeToTake;
 
-    // ✅ No-args constructor (required for Jackson)
-    public MedicineWithTime() {
-    }
+   public MedicineWithTime() {}
 
     // All-args constructor
     public MedicineWithTime(String medicineName, List<String> timeToTake) {
