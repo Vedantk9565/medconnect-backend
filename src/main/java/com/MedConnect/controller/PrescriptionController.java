@@ -158,7 +158,7 @@ public class PrescriptionController {
             document.add(new Paragraph("Medicines:").setBold().setFontSize(12).setMarginTop(10));
 
             // Create a Table with columns for prescription details
-            Table medTable = new Table(new float[]{3, 3, 3, 4});  // Adjust column widths if needed
+            Table medTable = new Table(new float[]{4,2,4});  // Adjust column widths if needed
             medTable.setWidth(UnitValue.createPercentValue(100));
 
             // Add table headers for the columns
@@ -169,13 +169,13 @@ public class PrescriptionController {
           
             // Loop through each prescription and add the details to the table
             for (Prescription p : prescriptions) {
-                
-            	 medTable.addCell(new Cell().add(new Paragraph(p.getMedicine().getDrugName())));
-            	 
-                 medTable.addCell(new Cell().add(new Paragraph(p.getTimeToTake())));
+                String drugName = (p.getMedicine() != null) ? p.getMedicine().getDrugName() : "N/A";
+                String timeToTake = (p.getTimeToTake() != null) ? String.join(", ", p.getTimeToTake()) : "N/A";
+                String dosage = (p.getDosage() != null) ? p.getDosage() : "N/A";
 
-            	 
-                medTable.addCell(new Cell().add(new Paragraph(p.getDosage())));
+                medTable.addCell(new Cell().add(new Paragraph(drugName)));
+                medTable.addCell(new Cell().add(new Paragraph(timeToTake)));
+                medTable.addCell(new Cell().add(new Paragraph(dosage)));
             }
 
             // Add the table to the document
