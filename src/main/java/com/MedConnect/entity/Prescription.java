@@ -1,11 +1,14 @@
 package com.MedConnect.entity;
 
 import jakarta.persistence.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import com.MedConnect.doclogin.entity.Medicine;
-import com.MedConnect.entity.Patient;  
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 
-@CrossOrigin(origins = "https://medconnect-frontend-1.onrender.com")
 @Entity
 public class Prescription {
 
@@ -15,28 +18,52 @@ public class Prescription {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
-    private Patient patient;  // Establishes relationship with Patient entity
+    private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
-    private Medicine medicine;  // Reference to the Medicine entity
+    private Medicine medicine;
 
     private String dosage;
 
+    @JsonIgnore // hide raw JSON string from frontend
     @Column(name = "time_to_take", columnDefinition = "JSON")
     private String timeToTake;
+
+    // Send this as an array to the frontend
+    @JsonProperty("timeToTake")
+    public List<String> getTimeToTakeList() {
+        if (this.timeToTake == null) return new ArrayList<>();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(this.timeToTake, new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public String getTimeToTake() {
+        return timeToTake;
+    }
+
+    // Keep this for saving JSON string
+    public void setTimeToTake(String timeToTake) {
+        this.timeToTake = timeToTake;
+    }
 
     // Constructors
     public Prescription() {}
 
     public Prescription(Patient patient, Medicine medicine, String dosage, String timeToTake) {
-        this.patient = patient;  // Directly using Patient entity
-        this.medicine = medicine;  // Directly using Medicine entity
+        this.patient = patient;
+        this.medicine = medicine;
         this.dosage = dosage;
         this.timeToTake = timeToTake;
     }
 
-    // Getters and setters
+    // Other getters and setters
     public Long getId() {
         return id;
     }
@@ -63,13 +90,5 @@ public class Prescription {
 
     public void setDosage(String dosage) {
         this.dosage = dosage;
-    }
-
-    public String getTimeToTake() {
-        return timeToTake;
-    }
-
-    public void setTimeToTake(String timeToTake) {
-        this.timeToTake = timeToTake;
     }
 }
