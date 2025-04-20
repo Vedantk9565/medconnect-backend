@@ -2,6 +2,7 @@ package com.MedConnect.entity;
 
 import jakarta.persistence.*;
 import com.MedConnect.doclogin.entity.Medicine;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,6 +19,7 @@ public class Prescription {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @JsonBackReference
     private Patient patient;
 
     @ManyToOne

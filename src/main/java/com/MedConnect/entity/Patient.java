@@ -35,12 +35,11 @@ public class Patient {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    // ✅ Correct mapping for one-to-many prescriptions
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_id")
     private List<Prescription> prescription;
 
-    // ✅ No-args constructor
+    
     public Patient() {}
 
     // ✅ All-args constructor using List<Prescription>
