@@ -18,10 +18,11 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+    @JsonIgnoreProperties({"prescription"})
     private Patient patient;
+
 
     @ManyToOne
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
