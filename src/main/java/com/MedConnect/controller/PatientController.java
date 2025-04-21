@@ -70,7 +70,7 @@ public class PatientController {
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PutMapping("/patients/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient updatedPatient) {
         Optional<Patient> existingPatientOpt = patientRepository.findById(id);
         if (existingPatientOpt.isEmpty()) {
