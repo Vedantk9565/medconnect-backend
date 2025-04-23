@@ -20,8 +20,9 @@ public class Prescription {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
-    @JsonIgnoreProperties({"prescription"})
+    @JsonBackReference
     private Patient patient;
+
 
 
     @ManyToOne

@@ -72,24 +72,37 @@ public class PatientController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient updatedPatient) {
-        Optional<Patient> existingPatientOpt = patientRepository.findById(id);
-        if (existingPatientOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            Patient existingPatient = patientRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+
+            // Update simple fields
+            existingPatient.setName(updatedPatient.getName());
+            existingPatient.setAge(updatedPatient.getAge());
+            existingPatient.setBlood(updatedPatient.getBlood());
+            existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+            existingPatient.setDose(updatedPatient.getDose());
+            existingPatient.setFees(updatedPatient.getFees());
+            existingPatient.setUrgency(updatedPatient.getUrgency());
+
+            // ✅ Safely update the prescription list (IMPORTANT)
+            existingPatient.getPrescription().clear();
+            if (updatedPatient.getPrescription() != null) {
+                for (Prescription p : updatedPatient.getPrescription()) {
+                    p.setPatient(existingPatient); // important: maintain bidirectional link
+                    existingPatient.getPrescription().add(p);
+                }
+            }
+
+            Patient savedPatient = patientRepository.save(existingPatient);
+            return ResponseEntity.ok(savedPatient);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // for debugging in Render logs
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        Patient existingPatient = existingPatientOpt.get();
-
-        // Update fields manually, or use a mapper
-        existingPatient.setName(updatedPatient.getName());
-        existingPatient.setAge(updatedPatient.getAge());
-        existingPatient.setBlood(updatedPatient.getBlood());
-        existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
-        existingPatient.setPrescription(updatedPatient.getPrescription());
-        existingPatient.setFees(updatedPatient.getFees());
-
-        Patient saved = patientRepository.save(existingPatient);
-        return ResponseEntity.ok(saved);
     }
+
 
 
     @PostMapping
