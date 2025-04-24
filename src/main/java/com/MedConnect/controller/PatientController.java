@@ -10,7 +10,6 @@ import com.MedConnect.model.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.MedConnect.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
@@ -200,6 +199,12 @@ public class PatientController {
     @GetMapping("/medicines")
     public List<Medicine> getAllMedicines() {
         return medicineService.getAllMedicines();
+    }
+
+    @GetMapping("/patients/search")
+    public ResponseEntity<List<Patient>> searchPatients(@RequestParam String query) {
+        List<Patient> patients = patientRepository.findByNameContainingOrIdContaining(query, query);
+        return ResponseEntity.ok(patients);
     }
 
 }
