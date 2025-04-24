@@ -10,14 +10,19 @@ import com.MedConnect.model.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.MedConnect.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/patients")
@@ -125,46 +130,59 @@ public class PatientController {
         List<Prescription> existingPrescriptions = patient.getPrescription();
 
         if (existingPrescriptions == null) {
-            existingPrescriptions = new java.util.ArrayList<>();
+            existingPrescriptions = new ArrayList<>();
         }
+
         System.out.println("Available medicines:");
         medicineService.getAllMedicines().forEach(m -> System.out.println(m.getDrugName()));
 
+        ObjectMapper objectMapper = new ObjectMapper();
+
         for (MedicineWithTime medicineWithTime : medicinesWithTime) {
             System.out.println("Received medicine: " + medicineWithTime.getMedicineName());
-            for (String time : medicineWithTime.getTimeToTake()) {
-                Prescription newPrescription = new Prescription();
 
-                newPrescription.setPatient(patient); 
+            Medicine medicine = medicineService.getMedicineByName(medicineWithTime.getMedicineName());
+            if (medicine == null) {
+                System.out.println("Medicine not found: " + medicineWithTime.getMedicineName());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine not found: " + medicineWithTime.getMedicineName());
+            }
 
-                Medicine medicine = medicineService.getMedicineByName(medicineWithTime.getMedicineName());
-                if (medicine == null) {
-                    System.out.println("Medicine not found: " + medicineWithTime.getMedicineName());
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine not found: " + medicineWithTime.getMedicineName());
+            // Check if there's already a prescription for this medicine
+            Prescription existingPrescription = existingPrescriptions.stream()
+                .filter(p -> p.getMedicine().getId() == medicine.getId())
+                .findFirst()
+                .orElse(null);
+
+            try {
+                Set<String> newTimes = new HashSet<>(medicineWithTime.getTimeToTake());
+
+                if (existingPrescription != null) {
+                    // Merge with existing time values
+                    List<String> existingTimes = objectMapper.readValue(
+                            existingPrescription.getTimeToTake(), new com.fasterxml.jackson.core.type.TypeReference<List<String>>() {});
+                    newTimes.addAll(existingTimes);
+                    existingPrescription.setTimeToTake(objectMapper.writeValueAsString(newTimes));
+                } else {
+                    // Create new prescription
+                    Prescription newPrescription = new Prescription();
+                    newPrescription.setPatient(patient);
+                    newPrescription.setMedicine(medicine);
+                    newPrescription.setDosage("1 tablet");
+                    newPrescription.setTimeToTake(objectMapper.writeValueAsString(newTimes));
+                    existingPrescriptions.add(newPrescription);
                 }
-
-                newPrescription.setMedicine(medicine);
-                newPrescription.setDosage("1 tablet");
-
-                // Serialize the List<String> to a JSON string
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String timeToTakeJson = objectMapper.writeValueAsString(medicineWithTime.getTimeToTake());
-                    newPrescription.setTimeToTake(timeToTakeJson);  // Set JSON formatted time slots
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error serializing timeToTake");
-                }
-
-                existingPrescriptions.add(newPrescription);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error serializing timeToTake");
             }
         }
 
-        patient.setPrescription(existingPrescriptions); // Update patient's prescription list
-        patientRepository.save(patient); // Save the updated patient entity
+        patient.setPrescription(existingPrescriptions);
+        patientRepository.save(patient);
 
         return ResponseEntity.ok("Medicines assigned successfully");
     }
+
 
 
     @DeleteMapping("/{id}")
