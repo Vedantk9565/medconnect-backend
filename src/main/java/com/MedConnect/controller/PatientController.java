@@ -201,10 +201,11 @@ public class PatientController {
         return medicineService.getAllMedicines();
     }
 
-    @GetMapping("/patients/search")
-    public ResponseEntity<List<Patient>> searchPatients(@RequestParam String query) {
-        List<Patient> patients = patientRepository.findByNameContainingOrIdContaining(query, query);
-        return ResponseEntity.ok(patients);
+    @GetMapping("/search")
+    public ResponseEntity<List<Patient>> searchPatients(@RequestParam("query") String query) {
+        List<Patient> results = patientRepository.searchByNameOrId(query);
+        return ResponseEntity.ok(results);
     }
+
 
 }
